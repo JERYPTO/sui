@@ -24,6 +24,7 @@
 
 <a name="0x2_ecdsa_k1_EFailToRecoverPubKey"></a>
 
+Error if the public key cannot be recovered from the signature.
 
 
 <pre><code><b>const</b> <a href="ecdsa_k1.md#0x2_ecdsa_k1_EFailToRecoverPubKey">EFailToRecoverPubKey</a>: u64 = 0;
@@ -33,6 +34,7 @@
 
 <a name="0x2_ecdsa_k1_EInvalidSignature"></a>
 
+Error if the signature is invalid.
 
 
 <pre><code><b>const</b> <a href="ecdsa_k1.md#0x2_ecdsa_k1_EInvalidSignature">EInvalidSignature</a>: u64 = 1;
@@ -178,7 +180,14 @@ If the signature is valid to the pubkey and hashed message, return true. Else fa
 <summary>Implementation</summary>
 
 
-<pre><code><b>public</b> <b>native</b> <b>fun</b> <a href="ecdsa_k1.md#0x2_ecdsa_k1_secp256k1_verify_recoverable">secp256k1_verify_recoverable</a>(signature: &<a href="">vector</a>&lt;u8&gt;, public_key: &<a href="">vector</a>&lt;u8&gt;, hashed_msg: &<a href="">vector</a>&lt;u8&gt;): bool;
+<pre><code><b>public</b> <b>fun</b> <a href="ecdsa_k1.md#0x2_ecdsa_k1_secp256k1_verify_recoverable">secp256k1_verify_recoverable</a>(signature: &<a href="">vector</a>&lt;u8&gt;, public_key: &<a href="">vector</a>&lt;u8&gt;, hashed_msg: &<a href="">vector</a>&lt;u8&gt;): bool {
+    <b>let</b> recovered = <a href="ecdsa_k1.md#0x2_ecdsa_k1_ecrecover">ecrecover</a>(signature, hashed_msg);
+    <b>if</b> (&recovered == public_key) {
+        <b>return</b> <b>true</b>
+    } <b>else</b> {
+        <b>return</b> <b>false</b>
+    }
+}
 </code></pre>
 
 

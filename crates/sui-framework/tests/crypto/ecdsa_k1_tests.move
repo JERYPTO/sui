@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 #[test_only]
-module sui::ecdsa_tests {
+module sui::ecdsa_k1_tests {
     use sui::ecdsa_k1;
     use std::vector;
     
@@ -82,12 +82,12 @@ module sui::ecdsa_tests {
     }
 
     #[test]
+    #[expected_failure(abort_code = ecdsa_k1::EInvalidSignature)]
     fun test_secp256k1_verify_recoverable_sig_fails() {
         let msg = x"57caa176af1ac0433c5df30e8dabcd2ec1af1e92a26eced5f719b88458777cd6";
         let pk = x"0279be667ef9dcbbac55a06295ce870b07029bfcdb2dce28d959f2815b16f81798";
         let sig = x"9c7a72ff1e7db1646b9f9443cb1a3563aa3a6344e4e513efb96258c7676ac4895953629d409a832472b710a028285dfec4733a2c1bb0a2749e465a18292b8bd6";
-        let verify = ecdsa_k1::secp256k1_verify_recoverable(&sig, &pk, &msg);
-        assert!(verify == false, 0)
+        ecdsa_k1::secp256k1_verify_recoverable(&sig, &pk, &msg);
     }
 
     #[test]
