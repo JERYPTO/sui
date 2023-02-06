@@ -45,7 +45,7 @@ use crate::authority::AuthorityStore;
 use crate::authority::{
     authority_per_epoch_store::AuthorityPerEpochStore, authority_store::EffectsStore,
 };
-use crate::state_accumulator::{State, StateAccumulator};
+use crate::state_accumulator::StateAccumulator;
 use crate::transaction_manager::TransactionManager;
 use crate::{authority::EffectsNotifyRead, checkpoints::CheckpointStore};
 
@@ -462,11 +462,7 @@ async fn execute_transactions(
                 let effects: Vec<TransactionEffects> =
                     effects.into_iter().map(|fx| fx.data().clone()).collect();
 
-                let state = State {
-                    effects,
-                    checkpoint_seq_num,
-                };
-                accumulator.accumulate_checkpoint(state, epoch_store)?;
+                accumulator.accumulate_checkpoint(effects, checkpoint_seq_num, epoch_store)?;
 
                 return Ok(());
             }
